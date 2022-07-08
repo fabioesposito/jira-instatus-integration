@@ -7,7 +7,7 @@ export class JiraTicket {
   status: string;
   componentStatus: string;
   instatusPageID: string;
-  instatusIncientID: string;
+  instatusIncidentID: string;
 }
 
 export class InstatusIncident {

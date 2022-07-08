@@ -43,7 +43,7 @@ export class AppService {
     console.log(jira);
 
     const pageID = jira.instatusPageID;
-    const activeIncidentID = jira.instatusIncientID;
+    const activeIncidentID = jira.instatusIncidentID;
 
     const incident: InstatusIncident = mapJiraToIncident(jira);
     incident.resolved =
