@@ -1,15 +1,29 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { ComponentStatusType, IncidentStatusType, InstatusIncident, JiraTicket } from './app.model';
+import {
+  ComponentStatusType,
+  IncidentStatusType,
+  InstatusIncident,
+  JiraTicket,
+} from './app.model';
 
 @Injectable()
 export class AppService {
   constructor(private readonly httpService: HttpService) {}
 
-  apiURL = 'https://api.instatus.com/';
+  apiURL = 'https://api.instatus.com';
+  apiKey = process.env.INSTATUS_APIKEY || 'missing-api-key';
+  apiConfig = {
+    headers: {
+      'Content-type': 'application/json',
+      Authorization: `Bearer ${this.apiKey}`,
+    },
+  };
 
   createIncident(jira: JiraTicket): string {
     console.log(jira);
+
+    const pageID = jira.instatusPageID;
 
     const incident: InstatusIncident = {
       name: jira.summary,
@@ -26,7 +40,7 @@ export class AppService {
     };
 
     console.log(incident);
-    //this.httpService.post(this.apiURL, incident);
+    this.httpService.post(`${this.apiURL}/v1/${pageID}/incidents`, incident);
 
     return 'OK';
   }
@@ -34,6 +48,9 @@ export class AppService {
   updateIncident(jira: JiraTicket): string {
     console.log(jira);
 
+    const pageID = jira.instatusPageID;
+    const activeIncidentID = jira.instatusIncientID;
+
     const incident: InstatusIncident = {
       name: jira.summary,
       message: jira.message,
@@ -49,12 +66,11 @@ export class AppService {
     };
 
     console.log(incident);
-    //this.httpService.post(this.apiURL, incident);
+    this.httpService.put(
+      `${this.apiURL}/v1/${pageID}/incidents/${activeIncidentID}`,
+      incident,
+    );
 
     return 'OK';
   }
-
-  // findAll(): Observable<AxiosResponse<Cat[]>> {
-  //   return this.httpService.get('http://localhost:3000/cats');
-  // }
 }

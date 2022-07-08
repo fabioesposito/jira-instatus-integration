@@ -6,6 +6,8 @@ export interface JiraTicket {
   resolved: Date;
   status: string;
   componentStatus: string;
+  instatusPageID: string;
+  instatusIncientID: string;
 }
 
 export interface InstatusIncident {
