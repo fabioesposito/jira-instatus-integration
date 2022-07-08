@@ -1,5 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
+import { map, Observable } from 'rxjs';
 import {
   ComponentStatusType,
   IncidentStatusType,
@@ -20,57 +21,67 @@ export class AppService {
     },
   };
 
-  createIncident(jira: JiraTicket): string {
-    console.log(jira);
-
+  createIncident(jira: JiraTicket): Observable<any> {
     const pageID = jira.instatusPageID;
-
-    const incident: InstatusIncident = {
-      name: jira.summary,
-      message: jira.message,
-      components: jira.components,
-      started: new Date(),
-      resolved: null,
-      status: IncidentStatusType[jira.status],
-      notify: true,
-      statuses: {
-        id: jira.components[0],
-        status: ComponentStatusType[jira.componentStatus],
-      },
-    };
+    const incident: InstatusIncident = mapJiraToIncident(jira);
+    incident.started = new Date();
 
     console.log(incident);
-    this.httpService.post(`${this.apiURL}/v1/${pageID}/incidents`, incident);
 
-    return 'OK';
+    const data = this.httpService
+      .post(`${this.apiURL}/v1/${pageID}/incidents`, incident, this.apiConfig)
+      .pipe(
+        map((res) => {
+          return res.data;
+        }),
+      );
+
+    return data;
   }
 
-  updateIncident(jira: JiraTicket): string {
+  updateIncident(jira: JiraTicket): Observable<any> {
     console.log(jira);
 
     const pageID = jira.instatusPageID;
     const activeIncidentID = jira.instatusIncientID;
 
-    const incident: InstatusIncident = {
-      name: jira.summary,
-      message: jira.message,
-      components: jira.components,
-      started: new Date(),
-      resolved: null,
-      status: IncidentStatusType[jira.status],
-      notify: true,
-      statuses: {
+    const incident: InstatusIncident = mapJiraToIncident(jira);
+    incident.resolved =
+      IncidentStatusType[jira.status] === IncidentStatusType.RESOLVED
+        ? new Date()
+        : null;
+
+    console.log(incident);
+
+    const data = this.httpService
+      .put(
+        `${this.apiURL}/v1/${pageID}/incidents/${activeIncidentID}`,
+        incident,
+        this.apiConfig,
+      )
+      .pipe(
+        map((res) => {
+          return res.data;
+        }),
+      );
+
+    return data;
+  }
+}
+
+function mapJiraToIncident(jira: JiraTicket): InstatusIncident {
+  const incident: InstatusIncident = {
+    name: jira.summary,
+    message: jira.message,
+    components: jira.components,
+    status: IncidentStatusType[jira.status],
+    notify: true,
+    statuses: [
+      {
         id: jira.components[0],
         status: ComponentStatusType[jira.componentStatus],
       },
-    };
-
-    console.log(incident);
-    this.httpService.put(
-      `${this.apiURL}/v1/${pageID}/incidents/${activeIncidentID}`,
-      incident,
-    );
-
-    return 'OK';
-  }
+    ],
+  };
+  return incident;
 }

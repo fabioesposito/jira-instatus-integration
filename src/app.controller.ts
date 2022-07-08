@@ -1,4 +1,5 @@
 import { Body, Controller, Post, Put } from '@nestjs/common';
+import { Observable } from 'rxjs';
 import { JiraTicket } from './app.model';
 import { AppService } from './app.service';
 
@@ -7,12 +8,12 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Post('/incidents')
-  createIncident(@Body() jira: JiraTicket): string {
+  createIncident(@Body() jira: JiraTicket): Observable<any> {
     return this.appService.createIncident(jira);
   }
 
   @Put('/incidents')
-  updateIncident(@Body() jira: JiraTicket): string {
+  updateIncident(@Body() jira: JiraTicket): Observable<any> {
     return this.appService.updateIncident(jira);
   }
 }

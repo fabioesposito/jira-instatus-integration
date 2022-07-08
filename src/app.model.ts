@@ -1,27 +1,27 @@
-export interface JiraTicket {
+export class JiraTicket {
   summary: string;
   message: string;
   components: Array<string>;
   created: Date;
-  resolved: Date;
+  resolved?: Date;
   status: string;
   componentStatus: string;
   instatusPageID: string;
   instatusIncientID: string;
 }
 
-export interface InstatusIncident {
+export class InstatusIncident {
   name: string;
   message: string;
   components: Array<string>;
-  started: Date;
-  resolved: Date;
+  started?: Date;
+  resolved?: Date;
   status: IncidentStatusType;
   notify: boolean;
-  statuses: ComponentStatus;
+  statuses: Array<ComponentStatus>;
 }
 
-export interface ComponentStatus {
+export class ComponentStatus {
   id: string;
   status: ComponentStatusType;
 }
