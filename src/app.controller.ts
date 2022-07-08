@@ -1,27 +1,18 @@
-import { Controller, Get, Post, Put } from '@nestjs/common';
+import { Body, Controller, Post, Put } from '@nestjs/common';
+import { JiraTicket } from './app.model';
 import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Post('/incidents')
+  createIncident(@Body() jira: JiraTicket): string {
+    return this.appService.createIncident(jira);
   }
 
-  @Post()
-  createIncident(): string {
-    return this.appService.createIncident();
-  }
-
-  @Post()
-  addComment(): string {
-    return this.appService.addComment();
-  }
-
-  @Put()
-  updateIncident(): string {
-    return this.appService.updateIncident();
+  @Put('/incidents')
+  updateIncident(@Body() jira: JiraTicket): string {
+    return this.appService.updateIncident(jira);
   }
 }

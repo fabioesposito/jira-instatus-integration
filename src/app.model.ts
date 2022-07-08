@@ -1,28 +1,40 @@
-interface Incident {
+export interface JiraTicket {
+  summary: string;
+  message: string;
+  components: Array<string>;
+  created: Date;
+  resolved: Date;
+  status: string;
+  componentStatus: string;
+}
+
+export interface InstatusIncident {
   name: string;
   message: string;
-  components: [];
+  components: Array<string>;
   started: Date;
-  status: string;
+  resolved: Date;
+  status: IncidentStatusType;
   notify: boolean;
+  statuses: ComponentStatus;
 }
 
-interface ComponentStatus {
+export interface ComponentStatus {
   id: string;
-  status: string;
+  status: ComponentStatusType;
 }
 
-enum IncidentStatusType {
-  INVESTIGATING,
-  IDENTIFIED,
-  MONITORING,
-  RESOLVED,
+export enum IncidentStatusType {
+  INVESTIGATING = 'INVESTIGATING',
+  IDENTIFIED = 'IDENTIFIED',
+  MONITORING = 'MONITORING',
+  RESOLVED = 'RESOLVED',
 }
 
-enum ComponentStatusType {
-  OPERATIONAL,
-  UNDERMAINTENANCE,
-  DEGRADEDPERFORMANCE,
-  PARTIALOUTAGE,
-  MAJOROUTAGE,
+export enum ComponentStatusType {
+  OPERATIONAL = 'OPERATIONAL',
+  UNDERMAINTENANCE = 'UNDERMAINTENANCE',
+  DEGRADEDPERFORMANCE = 'DEGRADEDPERFORMANCE',
+  PARTIALOUTAGE = 'PARTIALOUTAGE',
+  MAJOROUTAGE = 'MAJOROUTAGE',
 }
