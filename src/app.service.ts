@@ -53,8 +53,8 @@ export class AppService {
     console.log(incident);
 
     const data = this.httpService
-      .put(
-        `${this.apiURL}/v1/${pageID}/incidents/${activeIncidentID}`,
+      .post(
+        `${this.apiURL}/v1/${pageID}/incidents/${activeIncidentID}/incident-updates`,
         incident,
         this.apiConfig,
       )
