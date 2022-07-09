@@ -46,10 +46,9 @@ export class AppService {
     const activeIncidentID = jira.instatusIncidentID;
 
     const incident: InstatusIncident = mapJiraToIncident(jira);
-    incident.resolved =
-      IncidentStatusType[jira.status] === IncidentStatusType.RESOLVED
-        ? new Date()
-        : null;
+    if (IncidentStatusType[jira.status] === IncidentStatusType.RESOLVED) {
+      incident.resolved = new Date();
+    }
 
     console.log(incident);
 
