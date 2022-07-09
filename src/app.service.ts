@@ -1,12 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { map, Observable } from 'rxjs';
-import {
-  ComponentStatusType,
-  IncidentStatusType,
-  InstatusIncident,
-  JiraTicket,
-} from './app.model';
+import { catchError, map, Observable, throwError } from 'rxjs';
+import { InstatusIncident, JiraTicket } from './app.model';
 
 @Injectable()
 export class AppService {
@@ -23,7 +18,7 @@ export class AppService {
 
   createIncident(jira: JiraTicket): Observable<any> {
     const pageID = jira.instatusPageID;
-    const incident: InstatusIncident = mapJiraToIncident(jira);
+    const incident: InstatusIncident = new InstatusIncident(jira);
     incident.started = new Date();
 
     console.log(incident);
@@ -34,21 +29,19 @@ export class AppService {
         map((res) => {
           return res.data;
         }),
+        catchError((error) => {
+          return throwError(() => new Error(error));
+        }),
       );
 
     return data;
   }
 
   updateIncident(jira: JiraTicket): Observable<any> {
-    console.log(jira);
-
     const pageID = jira.instatusPageID;
     const activeIncidentID = jira.instatusIncidentID;
 
-    const incident: InstatusIncident = mapJiraToIncident(jira);
-    if (IncidentStatusType[jira.status] === IncidentStatusType.RESOLVED) {
-      incident.resolved = new Date();
-    }
+    const incident: InstatusIncident = new InstatusIncident(jira);
 
     console.log(incident);
 
@@ -62,25 +55,11 @@ export class AppService {
         map((res) => {
           return res.data;
         }),
+        catchError((error) => {
+          return throwError(() => new Error(error));
+        }),
       );
 
     return data;
   }
-}
-
-function mapJiraToIncident(jira: JiraTicket): InstatusIncident {
-  const incident: InstatusIncident = {
-    name: jira.summary,
-    message: jira.message,
-    components: jira.components,
-    status: IncidentStatusType[jira.status],
-    notify: true,
-    statuses: [
-      {
-        id: jira.components[0],
-        status: ComponentStatusType[jira.componentStatus],
-      },
-    ],
-  };
-  return incident;
 }

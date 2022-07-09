@@ -11,14 +11,34 @@ export class JiraTicket {
 }
 
 export class InstatusIncident {
-  name: string;
+  name?: string;
   message: string;
   components: Array<string>;
   started?: Date;
-  resolved?: Date;
   status: IncidentStatusType;
   notify: boolean;
   statuses: Array<ComponentStatus>;
+
+  constructor(jira: JiraTicket) {
+    const incident: InstatusIncident = {
+      message: jira.message,
+      components: jira.components,
+      status: IncidentStatusType[jira.status],
+      notify: true,
+      statuses: [
+        {
+          id: jira.components[0],
+          status: ComponentStatusType[jira.componentStatus],
+        },
+      ],
+    };
+
+    if (jira.summary !== '') {
+      incident.name = jira.summary;
+    }
+
+    return incident;
+  }
 }
 
 export class ComponentStatus {
