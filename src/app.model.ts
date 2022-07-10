@@ -20,24 +20,17 @@ export class InstatusIncident {
   statuses: Array<ComponentStatus>;
 
   constructor(jira: JiraTicket) {
-    const incident: InstatusIncident = {
-      message: jira.message,
-      components: jira.components,
-      status: IncidentStatusType[jira.status],
-      notify: true,
-      statuses: [
-        {
-          id: jira.components[0],
-          status: ComponentStatusType[jira.componentStatus],
-        },
-      ],
-    };
-
-    if (jira.summary !== '') {
-      incident.name = jira.summary;
-    }
-
-    return incident;
+    this.name = jira.summary;
+    this.message = jira.message;
+    this.components = jira.components;
+    this.status = IncidentStatusType[jira.status];
+    this.notify = true;
+    this.statuses = [
+      {
+        id: jira.components[0],
+        status: ComponentStatusType[jira.componentStatus],
+      },
+    ];
   }
 }
 

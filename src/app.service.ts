@@ -11,7 +11,7 @@ export class AppService {
   apiKey = process.env.INSTATUS_APIKEY || 'missing-api-key';
   apiConfig = {
     headers: {
-      'Content-type': 'application/json',
+      //'Content-type': 'application/json',
       Authorization: `Bearer ${this.apiKey}`,
     },
   };
@@ -42,7 +42,6 @@ export class AppService {
     const activeIncidentID = jira.instatusIncidentID;
 
     const incident: InstatusIncident = new InstatusIncident(jira);
-
     console.log(incident);
 
     const data = this.httpService

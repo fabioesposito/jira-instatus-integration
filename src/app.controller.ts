@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Put } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { JiraTicket } from './app.model';
 import { AppService } from './app.service';
@@ -12,7 +12,7 @@ export class AppController {
     return this.appService.createIncident(jira);
   }
 
-  @Put('/incidents')
+  @Post('/incidents/update')
   updateIncident(@Body() jira: JiraTicket): Observable<any> {
     return this.appService.updateIncident(jira);
   }
