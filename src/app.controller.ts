@@ -12,7 +12,7 @@ export class AppController {
     return this.appService.createIncident(jira);
   }
 
-  @Post('/incidents/update')
+  @Post('/incidents/timeline')
   updateIncident(@Body() jira: JiraTicket): Observable<any> {
     return this.appService.updateIncident(jira);
   }
