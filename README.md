@@ -35,3 +35,19 @@ POST /incidents/timeline
   "instatusIncidentID": "incident-id-on-jira"
 }
 ```
+
+Possible component statuses:
+```
+OPERATIONAL  
+DEGRADEDPERFORMANCE  
+PARTIALOUTAGE  
+MAJOROUTAGE  
+```
+
+Possible incident statuses:
+```
+INVESTIGATING  
+IDENTIFIED  
+MONITORING  
+RESOLVED  
+```
