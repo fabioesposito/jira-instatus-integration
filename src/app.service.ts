@@ -19,7 +19,6 @@ export class AppService {
   createIncident(jira: JiraTicket): Observable<any> {
     const pageID = jira.instatusPageID;
     const incident: InstatusIncident = new InstatusIncident(jira);
-    incident.started = new Date();
 
     console.log(incident);
 

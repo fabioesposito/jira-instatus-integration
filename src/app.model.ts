@@ -14,7 +14,7 @@ export class InstatusIncident {
   name?: string;
   message: string;
   components: Array<string>;
-  started?: Date;
+  started: Date;
   status: IncidentStatusType;
   notify: boolean;
   statuses: Array<ComponentStatus>;
@@ -23,6 +23,7 @@ export class InstatusIncident {
     this.name = jira.summary;
     this.message = jira.message;
     this.components = jira.components;
+    this.started = new Date();
     this.status = IncidentStatusType[jira.status];
     this.notify = true;
     this.statuses = [
